@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data / Models
+*.pt
+*.pth
+*.bin
+*.safetensors
+data/raw/
+data/processed/
+models/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+dist/
+build/
+
+# Docker
+docker-compose.override.yml
+.venv-linux/
+.python-version
+docker/wazuh/wazuh-docker/
+.env

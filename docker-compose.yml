@@ -1,0 +1,58 @@
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: socagent-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://socagent:socagent@postgres:5432/socagent
+      WAZUH_API_URL: ${WAZUH_API_URL}
+      WAZUH_API_USERNAME: ${WAZUH_API_USERNAME}
+      WAZUH_API_PASSWORD: ${WAZUH_API_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - project_default
+      - wazuh_network
+
+  postgres:
+    image: postgres:16
+    container_name: socagent-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: socagent
+      POSTGRES_PASSWORD: socagent
+      POSTGRES_DB: socagent
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - project_default
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: socagent-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - project_default
+
+volumes:
+  postgres_data:
+
+networks:
+  project_default:
+    driver: bridge
+
+  wazuh_network:
+    external: true
+    name: single-node_default
